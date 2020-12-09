@@ -1,87 +1,89 @@
-\documentclass[11pt, a4paper]{article}
-\usepackage[utf8]{inputenc}
-\usepackage[left=2cm,text={17cm, 24cm},top=3cm]{geometry}
+% Author: Matej MiŠtík <xmisti00@stud.fit.vutbr.cz>
 
+
+\documentclass[a4paper, 11pt]{article}
+
+
+\usepackage[T1]{fontenc} 
 \usepackage[czech]{babel}
-\usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
+\usepackage[left=2cm, top=3cm, text={17cm, 24cm}]{geometry}
 \usepackage{times}
-\usepackage{multirow}
-\usepackage[czech,ruled,linesnumbered,longend,noline]{algorithm2e}  
-\usepackage{graphicx}
-\usepackage{pdflscape}
-\usepackage{tabularx}
-\usepackage{adjustbox}
-\usepackage{colortbl}
-\usepackage{indentfirst}
-\usepackage{listings}
-\renewcommand{\algorithmcfname}{Gramatika}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage{graphicx} % vkládání obrázků
+\usepackage[unicode]{hyperref}
+\hypersetup{
+	colorlinks = true,
+	hypertexnames = false,
+	citecolor = green
+}
+
+
+\newcommand{\RNum}[1]{\uppercase\expandafter{\romannumeral #1\relax}} % makro na sázení římských čísel
 
 
 \begin{document}
-\begin{titlepage}
-\begin{center}
-
-{\Huge \textsc{Vysoké učení technické v Brně \\
-\vspace{0.5em}
-}}
-{\huge   \textsc{Fakulta informačních technologií}
-}
-
-\vspace{1.5em}
-\begin{figure}[ht]
-\begin{center}
-\includegraphics[scale=0.13]{fit.png}
-\end{center}
-\end{figure}
 
 
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Titulní stránka %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\begin{titlepage}
+		\begin{center}
+			\includegraphics[width=0.77\linewidth]{img/FIT_logo.pdf} \\
 
+			\vspace{\stretch{0.15}}
 
-\vspace{\stretch{0.382}} 
-\begin{LARGE}
-Dokumentace k projektu do IFJ/IAL \\
-\vspace{0.3em}
-{\Huge \textbf{Implementace překladače jazyka IFJ18}} \\
-\vspace{0.3em}
-{\huge Tým 106, varianta II}  \\
-\end{LARGE}
+			\Huge{Formální jazyky a překladače} \\
+			\bigskip
+			\Huge{Projektová dokumentace}\\
+			\smallskip
+			\LARGE{\textbf{Implementace překladače jazyka IFJ20}} \\
+			\Large{Tým 30, varianta \RNum{2}}\\
+			{\scriptsize Rozšířeni BASE,BOOLTHEN,UNARY \par}
+			\vspace{\stretch{0.618}}
+		\end{center}
 
-
-\vspace{\stretch{0.618}} 
-
-\end{center}
-
-{\Large\begin{flushleft}
-      \textbf{Členové týmu}: \vspace{-0.8em}
-    \end{flushleft}
-
-    \begin{tabular}{lclc}
-Lukáš Válek      & -- & xvalek15   &  25 \,\% \\
-Lukáš Piwowarský & -- & xpiwow00   &  25 \,\% \\
-Adam Pankuch     & -- & xpanku00  &  25 \,\% \\
-Jindřích Šesták  & -- & xsesta05  &  25 \,\%
-    \end{tabular}} \\\vspace{0.3em}
-    {\Large \textbf{Rozšíření}: BASE, IFTHEN} \\\vspace{0.3em}
-    \begin{flushright}
-      {\Large 5. prosince 2018}
-    \end{flushright}
-\end{titlepage}
+		\begin{minipage}{0.4 \textwidth}
+			{\Large \today}
+		\end{minipage}
+		\hfill
+		\begin{minipage}[r]{0.55 \textwidth}
+			\Large
+			\begin{tabular}{l l l}
+				\textbf{Filip Solich} & \textbf{(xsolic00)} & \quad 25\,\% \\
+				 Marek Sechra & (xsechr00) & \quad 25\,\% \\
+				 Andrej Baáš  & (xbaasa00) & \quad 25\,\% \\
+				Matej MiŠtík  & (xmisti00) & \quad 25\,\% \\
+			\end{tabular}
+		\end{minipage}
+	\end{titlepage}
 
 
 
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Obsah %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\pagenumbering{roman}
+	\setcounter{page}{1}
+	\tableofcontents
+	\clearpage
 
-%sem piste svoje texty k domunetaci. Zatim tady nechavam nektere veci z I
-\section{Úvod}
-Cílem projektu bylo vytvoření překladače pro jazyk IFJ18, který je podmnožinou jazyka Ruby. Vybrali jsme si II. variantu (tabulku s rozptýlenými položkami).
 
-\section{Etapy projektu}
-\begin{enumerate}
-  \item Návrh struktury programu (konečný automat (viz obrázek \ref{pic:1}), LL gramatika (viz gramatika 1), LL-tabulka (viz tabulka \ref{tab:1}), precedenční tabulka (viz tabulka 2))
+
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Úvod %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\pagenumbering{arabic}
+	\setcounter{page}{1}
+	
+	\section{Úvod}
+
+	Cílem projektu bylo vytvořit program v~jazyce~C, který načte zdrojový kód zapsaný ve zdrojovém jazyce IFJ20,
+	jenž je zjednodušenou podmnožinou jazyka GO a~přeloží jej do finálního mezikódu IFJcode20.
+ 
+  \section{Etapy projektu}
+    \begin{enumerate}
+  \item Návrh struktury programu konečný automat ( obrázek \ref{figure:automat}),LL-tabulka ( tabulka \ref{table:ll_table} ),\newline LL gramatika ( tabulka \ref{table:ll_gramatika} ), precedenční tabulka ( tabulka \ref{table:prec_table} )
   \vspace{-0.6em}
   \item Lexikální analýza
   \vspace{-0.6em}
-  \item Prediktivní syntaktická analýza 
+  \item Syntaktická analýza podľa LL Gramatiky
   \vspace{-0.6em}
   \item Precedenční syntaktická analýza 
   \vspace{-0.6em}
@@ -91,282 +93,333 @@ Cílem projektu bylo vytvoření překladače pro jazyk IFJ18, který je podmno�
   \vspace{-0.6em}
   \item Tvorba dokumentace
   \vspace{-0.6em}
-\end{enumerate}
+    \end{enumerate}
 
 
-\section{Datové struktury}
-\noindent
-\verb|token_t| -- Struktura uchovávající informace o tokenech. \newline
-\verb|stack_tkn_t| -- Zásobník tokenů využívaný především v prediktivní analýze. \newline
-\verb|stack_sa_t| -- Zásobník realizovaný pomocí obousmerně vázaného seznamu využívaný v prec. analýze. \newline
-\verb|stack_str_t| -- Zásobník řetězců využívaný především při generování kódu. \newline
-\verb|queue_t| -- Fronta tokenů a řetězců využívaná v lexikální analýze.\newline
-\verb|list_t| -- Fronta řetězců realizována pomocí jednosměrně vázaného seznamu.\newline
-\verb|symtable_t| -- Tabulka s rozptýlenými položkami.\newline
-\verb|dynamic_arr_t| -- Dynamické pole parametrů funkce.\newline
-\verb|dynamic_str_t| -- Dynamický řetězec využívaný v lexikální analýze k ukládání lexémů. 
+	\section{Lexikální analýza - Filip}
+    Lexikální analyzátor ( scanner ) představovala první část projektu, kterou bylo nutno implementovat. 
+    Produktem LA je datová struktura \verb|token_t|, se kterou se pak dále pracuje v ostatních částech překladače.
+	
+	Lexikální analyzátor je implementován jako deterministický konečný automat.V jazyce implementovaný pomocí nekonečného \texttt{switch}, kde každý případ
+	\texttt{case} je ekvivalentní jenom k~jednomu stavu automatu. Pokud načtený znak nesouhlasí s~žádným znakem, který jazyk povoluje,
+	program je ukončen a~vrací chybu 1  (chybná struktura aktuálního lexému). Jinak se přechází do dalších stavů a~načítají se další znaky, dokud nemáme hotový jeden
+	token, který potom vracíme a~ukončíme tuto funkci.
+	
 
-\section{Lexikální analýza}
-Lexikální analyzátor (dále jen LA) představoval první část projektu, kterou bylo nutno implementovat. Zavedli jsme obousměrnou komunikaci mezi LA a syntaktickým analyzátorem (dále jen SA), kdy SA může číst token, ale také vrátit token zpět do LA. Při dalším volání LA není token čten ze standartního vstupu, ale z fronty, ve které jsou uchovávány dříve vrácené tokeny. Toto je realizováno pomocí datové struktur~\verb|queue_t|. 
-Dále lexikální analyzátor zajišťuje ignorování komentářů. Produktem LA je datová struktura \verb|token_t|, se kterou se pak dále pracuje v ostatních částech překladače.
+	\section{Syntaktická analýza - Andrej skontrolovat}
 
-\section{Syntaktický analýza}
-\subsection{Prediktivní analýza}
-Rozhodli jsme se použít prediktivní analýzu (dále jen PA), protože nám přišla sofistikovanější a také jako větší výzva na implementaci. Pravidla LL gramatiky společně s LL-tabulkou jsou umístěny přímo v kódě překladače, a to přesně v takové podobě, v jaké jsou uvedené v příloze. Poslední sloupec v LL-tabulce pojmenovaný "expr" nekoresponduje s žádným terminálem používaným v LL gramatice, ale souhrně reprezentuje všechny tokeny, kterými může precedenční analýza výrazů začínat (v případě výrazu, který následně není přiřazený žádné proměnné). V PA používáme tyto datové struktury:\newline
+    Syntaktická analýza je nejdůležitějším modulem překladačů protože řídí a závisí od ní ostatní moduly.
 
-\noindent\verb|stack_str_t| -- Zásobník ukládající generovaný kód při if-statement, while-loop a definicích funkcí.\newline
-\verb|stack_tkn_t| -- Zásobník nutný pro implementaci algoritmu prediktivní analýzy. \newline
+	Až na výrazy se syntaktická analýza řídí podle pravidel v~LL -- tabulce \ref{table:ll_gramatika}. Každé pravidlo LL Gramatiky má svou vlastní funkci, která dostává přes parametr ukazatel na \texttt{fdata},
+	což je struktura obsahující proměnné nutné pro správné fungování analýzy. Syntaktická analýza žádá po lexikálním
+	analyzátoru tokeny pomocí funkce \texttt{get\_next\_token}. Tyto tokeny načítá lexikální analyzátor ze standardtního vstupu
+	a~zároveň provádí lexikální analýzu.
 
-\subsection{Precedenční analýza}
-Výrazy jsou jsou zpracovávány metodou precedenční syntaktické analýzy pomocí algoritmu známého z přednášek. Analyzátor komunikuje se třemi hlavními moduly: scannerem, prediktivním analyzátorem a generátorem cílového kódu. Při implementaci jsou použity tyto pomocné datové struktury: \newline
+	Aby se příkaz návratu z~funkce nevyskytoval v~hlavním těle programu, ***
 
-\noindent\verb|stack_sa_t| -- Zásobník uchovávající příchozí tokeny (terminály) ze scanneru, včetně následných~neterminálů, které vzniknou při analyzování výrazu. \newline
-\verb|stack_tkn_t|-- Zásobník uchovávající parametry, se kterými je volána funkce v zdrojovém kódu.
+	\subsection{Zpracování výrazů pomocí precedenční syntaktické analýzy - Andrej -> potreba upravit podla seba}
+	
+	Precedenční analýza je v~syntaktické analýze definována a~volána jako ostatní pravidla v~LL -- gramatice implementovaná v \texttt{parser.c}
+
+	Při zpracovávání výrazů je použita precedenční tabulka \ref{table:prec_table}. Jelikož operátory \texttt{+} a~– mají
+	stejnou asociativitu a~prioritu, mohli jsme je zjednodušit do jednoho sloupce a~řádku tabulky \texttt{+ -}.
+	Totéž jsme mohli udělat s~operátory \texttt{*} a~\texttt{/} (v~tabulce sloupec a~řádek \texttt{* /}) a~také
+	všemi relačními operátory (v~tabulce sloupec a~řádek \texttt{r}). Řádek a~sloupec \texttt{i} symbolizuje
+	identifikátor, číselnou hodnotu nebo řetězec. Pro získání indexu ze symbolu do tabulky jsme si vytvořili
+	funkci \texttt{get\_prec\_table\_index}, které se jako parametr zadá symbol, a~vrátí index do tabulky.
+	Mezi povolené symboly ve výrazech patří všechny operátory, literály, které jsou v~tabulce zastoupeny již
+	dříve popsaným \texttt{i}, a~závorky. Tyto symboly jsou terminály. Všechny ostatní symboly, které výraz
+	obsahovat nemůže, jsou zastoupeny symbolem \texttt{\$}. Řádky tabulky označují vrchní terminál v~zásobníku
+	symbolů a~sloupce symbol v~aktuálním tokenu.
+
+	Po spuštění analýzy se podle vrchního terminálu v~zásobníku symbolů a~symbolu aktuálního tokenu provádějí různé
+	operace a~v~některých případech se volá funkce \texttt{get\_next\_token}.
+
+	Pokud znak z~tabulky je \texttt{<}, vložíme zarážku za vrchní terminál, aktuální symbol vložíme na vrchol zásobníku
+	a~zavoláme funkci \texttt{get\_next\_token}. Pokud znak z~tabulky je \texttt{>} a~existuje pravidlo, podle kterého
+	se dají zredukovat položky zásobníku symbolů od nejvrchnější položky až po zarážku, tak je zredukujeme a~odstraníme
+	zarážku. Během provádění redukce podle stanovených pravidel se otestuje sémantika levého a~pravého operandu a~pokud
+	je to potřebné a~možné, provede se implicitní přetypování jednoho nebo obou operandů. Pokud znak je \texttt{=}, aktuální
+	symbol vložíme na vrchol zásobníku a~zavoláme funkci \texttt{get\_next\_token}. To opakujeme až do chvíle, kdy na místě
+	v~tabulce určeném vrchním terminálem v~zásobníku symbolů a~symbolem aktuálního tokenu žádný znak není. Pokud vrchní
+	terminál i~aktuální symbol je \texttt{\$} a~na vrcholu zásobníku zůstal jeden výsledný neterminál, syntaktická analýza je
+	úspěšná, v~jiných případech končí neúspěšně.
 
 
-\section{Sémantická analýza}
-Sémantická analýza probíhá ve třech modulech, a to v: predektivním analyzátoru, precedenčním analyzátoru a v generátoru cílového kódu (pro vestavěné funkce a výrazy). 
 
-Prediktivní analyzátor společně s precedenčním analyzátorem je odpovědný za ověřování správného počtu parametrů při volání funkcí, za ověřování redefinice funkcí a kolize jmen proměnných a funkcí. 
+	
+	\subsection{Sémantická analýza}
 
-Generátor vnitřního kódu kontroluje datové typy operandů, pokud je to možné. V případě, že alespoň jeden operand je proměnná, dochází k sémantické kontrole za běhu. Dále zajišťuje běhovou kontrolu dělení nulou. 
+    Ve struktuře \texttt{fdata} 
+	V modulu \texttt{symtable.c} Pro sémantickou analýzu používáme 2 tabulky symbolů.první tabulka se nachází ve struktuře \texttt{symtable\_func}. Tabulka je globální a slouží k uchovávání funkcí a jejich parametrů.druhá tabulka se nachází ve struktuře \texttt{symtable\_var}. Tabulka se používá pro proměné a jejich parametry, přičemž se chápu jako lokální tabulky, které se ukládájí na zásobníku. Zásobník je v modulu \texttt{symstack.c} Naše tabulky symboů jsou implementováný jako tabulky s náhodným rozptýlením. V sémantické analýze se používají ke kontrole definic, dodržení správného typu, návratových hodnot apod.
 
-\section{Implementace tabulky symbolů}
-Tabulka symbolů je implementována jako tabulka s rozptýlenými položkami s explicitně zřetězenými synonymy. Synonyma jsou vkládána do jednosměrně vázaného lineárního seznamu, přičemž nové položky jsou vkládány na jeho začátek. V programu se pracuje se dvěma druhy tabulek symbolů a to s tabulkou pro funkce a tabulkou pro proměnné. Tabulek proměnných může být několik, protože každá odpovídá za proměnné v jednom bloku kódu. Tabulka funkcí je pouze jedna a slouží k zaznamenávání informací o funkcích, které jsou přístupné z kterékoliv úrovně kódu. 
+	\section{Generování cílového kódu}
+
+	Vnitřní kód se genereju v parseru a je velmi podobný cílovému kódu IFJcode20. 
+	Je ukládán v lineárním seznamu a každá položka obsahuje instrukci (ta je shodna s instrukcemi IFJcode20) a až 3 symbolické adresy.
+	V případě konstanty je místo adresy uložena přímo hodnota konstanty. Jakmile jsou vygenerovány všechny instrukce, 
+	tak se nad seznamem mohou provést optimalizace, které ale neprovádíme. Poté se všechny instrukce vypíší na STDOUT a konstanty se převedou do
+	požadovaného formatu.
+
+	V modulu \texttt{generator.c} se taky generují symbolické adresy a unikátní jména pro návěští a proměnné. Paramentry funkcí mají
+	jména ve tvaru \texttt{\$\_0}, \texttt{\$\_1}, ..., protože při volání funkce není známo jméno parametru, ale víme pořadí, a návratové hodnoty funkcí mají jmena
+	ve tvaru \texttt{\$\_ret0}, \texttt{\$\_ret1}, ..., protože návratové hodnoty žádné jména nemají. Unikátnost těchto jmen je zaručena tím že každé funcki se při volání vytvoří
+	vlastní lokální rámec.
 
 
-\section{Generování kódu}
-Pro potřeby tohoto projektu jsme zvolili přímé generování tří adresného kódu, protože jiné metody neposkytovaly žádnou výhodu jen časové zdržení. Instrukce generujeme do abstraktního datového typu \verb|list_t|, protože je potřeba zamezit vícenásobné deklaraci v cyklech. Pokud se analýza nachazí ve while-loop nebo if-statement, tak budou veškeré instrukce deklarace proměnných vytisknuty před začátkem while-loop respektive if-statement.
 
-Generování kódu probíhá v těchto modulech: prediktivní analyzátor a precedenční analyzátor. Prediktivní analyzátor generuje cílový kód pro definice funkcí, if-statement, while-loop a definování proměnných. Precedenční analyzátor generuje cílový kód pro volání funkcí, volání vestavěných funkcí a výrazy.  
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Speciální algoritmy a datové struktury %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\section{Speciální algoritmy a~datové struktury}
+	
+	\subsection{Tabulka symbolů}
+    Tabulka symbolů, ve zdrojových souborech \verb|symtable.c|, slouží k uchování názvů definovaných funkcí a proměnných. Pro nalezení definované položky v řídkém seznamu slouží tzv. hash, který nám řekne, kde se v tabulce tato položka podle názvu nachází. U proměnné můžeme najít její přiřazenou hodnotu a u funkce její jednotlivé argumenty nebo definované proměnné uvnitř této funkce.
 
-\newpage
-\subsection{Generování cílového kódu pro výrazy}
-V rámci generování instrukcí pro výrazy se musela provádět sémantická analýza. Tu jsem provedli použitím instrukcí pro zjištění typu proměnných, jejich přetypováním a následných skoků. Při generování kódu jsme se rozhodli pro lehkou optimalizaci. Ta spočívá v tom, že na základě datových typů operandů, získaných z precedenční analýzy, se vygenerují jen ty nejnutnější instrukce. Tím se omezí množství skoků a testů ve výsledném programu. 
+    \subsection{Zásobník}
+    Používáme zásobník \verb|symstack.c|  v sobě uchovává hodnoty indentů. Zásobník naplňuje lexikální analyzátor a správnost indentů následně kontroluje syntaktický analyzátor.
 
-\section{Rozdělení práce}
-\noindent
-Lukáš Válek
+    \section{Rozšíření}
+    \subsection{BASE}
+    
+    \subsection{BOOLTHEN}
+     
+    \subsection{UNARY}
+
+
+
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Práce v týmu %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\section{Práce v~týmu***}
+
+	\subsection{Verzovací systém a plánovací systém}
+
+	Pro správu souborů projektu jsme používali verzovací systém Git. Jako vzdálený repositář jsme používali \mbox{GitHub}.Jednotlivé změny smě průběžne přidávali aby sme mali překladač v tom nejaktuálnějším a zálohovaném stave.
+
+	\subsection{Komunikace}
+
+	Pro komunikaci smě využívali volně stažitelnou aplikaci Discord, kde jsme měli vytvořenou skupinovou komunikaci a vedli jsme pravidelný oficiální meeting jednou do týdne. Neoficiálně jsme vždy komunikovali pomocí textových zprav uvnitř aplikace.
+
+	\subsection{Rozdělení práce mezi členy týmu}
+
+	Na základe rozdělení práce a časové složitosti úkolů jsme procentuální hodnocení 25\,\% rozdělili rovnoměrně. 
+	\bigskip
+	
+	\noindent
+Filip Solich
 \vspace{-0.6em}
 \begin{itemize}
-  \item{Tabulka symbolů}
-  \vspace{-0.6em}
-  \item{Implementace stacku pro řetězce}
+  \item{Lexikální analýza}
   \vspace{-0.6em}
   \item{Generování cílového kódu pro výrazy}
   \vspace{-0.6em}
-  \item{Generování cílového kódu pro vestavěné funkce}
-  \vspace{-0.6em}
-  \item{Implementace dynamického pole parametrů}
 \end{itemize}
-Lukáš Piwowarski
+Marek Sechra
 \vspace{-0.6em}
 \begin{itemize}
-  \item{Návrh a implementace precedenční analýzy}
+  \item{Sémantická analýza}
   \vspace{-0.6em}
-  \item{Implementace stacku pro tokeny}
-  \vspace{-0.6em}
-  \item{Generování cílového kódu pro volání funkcí}
-  \vspace{-0.6em}
-  \item{Implementace stacku pro precedenční analýzu}
+  \item{Tabulka symbolů}
 \end{itemize}
-Adam Pankuch
+Andrej Baáš
 \vspace{-0.6em}
 \begin{itemize}
-  \item{Návrh a implementace prediktivní analýzy}
+  \item{Syntaktická analýza}
   \vspace{-0.6em}
-  \item{Implementace datové struktury list, queue}
+  \item{Semantická analýza}
   \vspace{-0.6em}
-  \item{Generování cílového kódu pro if-statement, while-loop, definice funkcí, definice proměnných}
-  \vspace{-0.6em}
-  \item{Implementace testovacího skriptu}
+  \item{Generátor cílového kódu}
 \end{itemize}
-Jindřich Šesták
+Matej Mištík
 \vspace{-0.6em}
 \begin{itemize}
-  \item{Návrh a implementace lexikálního analyzátoru}
+  \item{Dokumentace}
   \vspace{-0.6em}
-  \item{Generování cílového kódu pro if-statement, while-loop}
+  \item{Generování návěští cílového kódu }
   \vspace{-0.6em}
-  \item{Generování vestavěných funkcí}
-  \vspace{-0.6em}
-  \item{Implementace dynamického řetězce}
 \end{itemize}
+\bigskip
 Dále se každý podílel na tvorbě dokumentace a tvorbě testovacích zdrojových kódů.
-\section{Rozšíření}
-\subsection{BASE}
-Toto rozšíření jsme řešili pouze malou úpravou v LA.  
-\subsection{IFTHEN}
-Už v návrhu LL gramatiky jsme počítali s tímto rozšířením, proto nebyly potřebné pozdější úpravy.  
+	       
 
-\section{Komunikace v~týmu}
-Jako hlavní komunikační kanál sloužil Messenger, popř. Discord (videohovory). Dále probíhaly pravidelné schůzky, na kterých jsme prodiskutovávali udělenou práci a rozdělovali jsme novou.  
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Závěr %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\section{Závěr**}
 
-Jako verzovací systém jsme použili Git hostovaný na službě Github. 
-
-\section{Shrnutí}
-Projekt byl pro nás zcela novou zkušeností. Nikdo z nás nikdy nepracoval na větším týmovém projektu, proto nám proces tvoření překladače přinesl spoustu nových znalostí, nejen z oblasti formálních jazyků, programování v jazyce C, návrhu komplexnějšího programu, ale také z oblasti týmové práce a uskalými s ní spojenými, jako je například komunikace. Určitě byl pro nás projekt přínosem. 
+    Překladač představoval veľkú výzvu a vyžadoval spoluprací všech členů týmu. Získali sme zkušenosti jednak teoretické z datových struktur předmětu IAL a překladačů předmětu IFJ, ale taktéž praktické či už prácou v tíme či postupním vytváraním modulů až po fungující celek. Projekt bol časově náročný, ale úsilí na naň vyvinuté se vrátí v zkušenostech, které smě získali.
 
 \newpage
-\begin{algorithm}[H]
-\label{tab:1}
-  \SetInd{0em}{1em}
-  \SetNlSty{}{}{:}
-  \SetNlSkip{-1em}
-  \Indp
-  \Indp
-  \BlankLine
-  \begin{tabularx}{\textwidth}{l>{$}c<{$}X}
- {[st-list]} &\rightarrow& [stat] [EOL-EOF]
-\end{tabularx}\\
-  \begin{tabularx}{\textwidth}{l>{$}c<{$}X}
-  {[st-list]} &\rightarrow& EOL [st-list]
-\end{tabularx}\\
-  \begin{tabularx}{\textwidth}{l>{$}c<{$}X}
-  {[st-list]} &\rightarrow& $\varepsilon$
-\end{tabularx}\\ 
-  \begin{tabularx}{\textwidth}{l>{$}c<{$}X}
-  {[EOL-EOF]} &\rightarrow& EOL [st-list]
-\end{tabularx}\\ 
-  \begin{tabularx}{\textwidth}{l>{$}c<{$}X}
-  {[EOL-EOF]} &\rightarrow& $\varepsilon$
-\end{tabularx}\\ 
-  \begin{tabularx}{\textwidth}{l>{$}c<{$}X}
-  {[stat]}    &\rightarrow& def [id-func] [params-gen] [end-list]
-\end{tabularx}\\ 
-  \begin{tabularx}{\textwidth}{l>{$}c<{$}X}
-  {[stat]}    &\rightarrow& [command]
-\end{tabularx}\\ 
-  \begin{tabularx}{\textwidth}{l>{$}c<{$}X}
-  {[command]} &\rightarrow& while do EOL [end-list]
-\end{tabularx}\\ 
-  \begin{tabularx}{\textwidth}{l>{$}c<{$}X}
-  {[command]} &\rightarrow& if then EOL [if-list]
-\end{tabularx}\\ 
-  \begin{tabularx}{\textwidth}{l>{$}c<{$}X}
-  {[command]} &\rightarrow& ID [func-assign-expr]
-\end{tabularx}\\ 
-  \begin{tabularx}{\textwidth}{l>{$}c<{$}X}
-  {[func-assign-expr]} &\rightarrow& = 
-\end{tabularx}\\ 
-  \begin{tabularx}{\textwidth}{l>{$}c<{$}X}
-  {[end-list]}  &\rightarrow& [command] EOL [end-list]
-\end{tabularx}\\ 
-  \begin{tabularx}{\textwidth}{l>{$}c<{$}X}
-  {[end-list]}  &\rightarrow& EOL [end-list]
-\end{tabularx}\\ 
-  \begin{tabularx}{\textwidth}{l>{$}c<{$}X}
-  {[end-list]}  &\rightarrow& end
-\end{tabularx}\\ 
-  \begin{tabularx}{\textwidth}{l>{$}c<{$}X}
-  {[if-list]}  &\rightarrow& [command] EOL [if-list]
-\end{tabularx}\\ 
-  \begin{tabularx}{\textwidth}{l>{$}c<{$}X}
-  {[if-list]}  &\rightarrow& EOL [if-list]
-\end{tabularx}\\ 
-  \begin{tabularx}{\textwidth}{l>{$}c<{$}X}
-  {[if-list]}  &\rightarrow& elif then EOL [if-list]
-\end{tabularx}\\ 
-  \begin{tabularx}{\textwidth}{l>{$}c<{$}X}
-  {[if-list]}  &\rightarrow& else EOL [end-list]
-\end{tabularx}\\ 
-  \begin{tabularx}{\textwidth}{l>{$}c<{$}X}
-  {[if-list]}  &\rightarrow& end 
-\end{tabularx}\\ 
-  \begin{tabularx}{\textwidth}{l>{$}c<{$}X}
-  {[id-func]}    &\rightarrow& ID
-\end{tabularx}\\ 
-  \begin{tabularx}{\textwidth}{l>{$}c<{$}X}
-  {[id-func]}    &\rightarrow& FUNC
-\end{tabularx}\\ 
-  \begin{tabularx}{\textwidth}{l>{$}c<{$}X}
-  {[params-gen]} &\rightarrow& ( [p-brackets] 
-\end{tabularx}\\ 
-  \begin{tabularx}{\textwidth}{l>{$}c<{$}X}
-  {[p-brackets]}   &\rightarrow& ID [p-brackets-cont] 
-\end{tabularx}\\ 
-  \begin{tabularx}{\textwidth}{l>{$}c<{$}X}
-  {[p-brackets]}   &\rightarrow& ) EOL
-\end{tabularx}\\ 
-  \begin{tabularx}{\textwidth}{l>{$}c<{$}X}
-  {[p-brackets-cont]}&\rightarrow& , ID [p-brackets-cont]
-\end{tabularx}\\ 
-  \begin{tabularx}{\textwidth}{l>{$}c<{$}X}
-  {[p-brackets-cont]} &\rightarrow& ) EOL
-\end{tabularx}\\ 
+\appendix
 
-  \caption{\textsc{LL Gramatika}}
-\end{algorithm}
+\section{Konečný Automat}
 
-\begin{table}[]
-\setlength{\tabcolsep}{4pt}
-\centering
-\arrayrulecolor[rgb]{0.6,0.6,0.6}
-\begin{tabular}{l|l|l|l|l|l|l|l|l|l|l|l|l|l|l|l}
-                       & \textbf{if} & \textbf{else} & \textbf{elseif} & \textbf{end} & \textbf{while} & \textbf{def} & \textbf{EOL} & \textbf{EOF} & \textbf{=}  & \textbf{(}  & \textbf{)}  & \textbf{,}  & \textbf{ID} & \textbf{FUNC} & \textbf{"expr"} \\\hline
-\textbf{{[}st-list{]} }         & 1  & 0    & 0     & 0   & 1     & 1   & 2   & 3   & 0  & 1  & 0  & 0  & 1  & 1    & 1      \\\hline
-\textbf{{[}EOL-EOF{]}}          & 0  & 0    & 0     & 0   & 0     & 0   & 4   & 5   & 0  & 0  & 0  & 0  & 0  & 0    & 0      \\\hline
-\textbf{{[}stat{]}}             & 7  & 0    & 0     & 0   & 7     & 6   & 0   & 0   & 0  & 7  & 0  & 0  & 7  & 7    & 7      \\\hline
-\textbf{{[}command{]} }         & 9  & 0    & 0     & 0   & 8     & 0   & 0   & 0   & 0  & 0  & 0  & 0  & 10 & 0    & 0      \\\hline
-\textbf{{[}func-assign-expr{]}} & 0  & 0    & 0     & 0   & 0     & 0   & 0   & 0   & 11 & 0  & 0  & 0  & 0  & 0    & 0      \\\hline
-\textbf{{[}end-list{]} }        & 12 & 0    & 0     & 14  & 12    & 0   & 13  & 0   & 0  & 12 & 0  & 0  & 12 & 12   & 12     \\\hline
-\textbf{{[}if-list{]}}          & 15 & 18   & 17    & 19  & 15    & 0   & 16  & 0   & 0  & 15 & 0  & 0  & 15 & 15   & 15     \\\hline
-\textbf{{[}id-func{]}}          & 0  & 0    & 0     & 0   & 0     & 0   & 0   & 0   & 0  & 0  & 0  & 0  & 20 & 21   & 0      \\\hline
-\textbf{{[}params-gen{]}}       & 0  & 0    & 0     & 0   & 0     & 0   & 0   & 0   & 0  & 22 & 0  & 0  & 0  & 0    & 0      \\\hline
-\textbf{{[}p-brackets{]}}       & 0  & 0    & 0     & 0   & 0     & 0   & 0   & 0   & 0  & 0  & 24 & 0  & 23 & 0    & 0      \\\hline
-\textbf{{[}p-brackets-cont{]}}  & 0  & 0    & 0     & 0   & 0     & 0   & 0   & 0   & 0  & 0  & 26 & 25 & 0  & 0    & 0     
-\end{tabular}
-\label{tab:2}
-\caption{LL tabulka}
-\end{table}
+		\begin{figure}[!ht]
+		\centering
+		\includegraphics[ width=0.8\linewidth]{img/automat.pdf}
+		\caption{Konečný automat využitý k implementaci Lexikální analýzy}
+		\label{figure:automat}
+	\end{figure}
 
 
-\begin{table}[]
-\renewcommand{\arraystretch}{2}
-%\begin{sidewaystable}
-\scriptsize
+\section{LL Tabulka}
 
-\centering
-\begin{tabular}{ c | c c c c c c c c c c c c } 
-OP  & + & * & ( & ) & i & - & / & rel & f & , & \$ \\ \hline
-+ & \textgreater & \textless & \textless &  \textgreater & \textless & \textgreater & \textless 
-  & \textgreater & X &  \textgreater &  \textgreater   \\ \hline
-* & \textgreater & \textgreater & \textless & \textgreater & \textless & \textgreater   
-  & \textgreater  & \textgreater  & X & \textgreater & \textgreater \\ \hline
-( & \textless & \textless & \textless & = & \textless & \textless & \textless & \textless 
-   & X & = & X \\ \hline
-) & \textgreater & \textgreater & X & \textgreater & X & \textgreater & \textgreater 
-  & \textgreater  & X & \textgreater & \textgreater \\ \hline
-i & \textgreater & \textgreater & X & \textgreater & X & \textgreater & \textgreater 
-  & \textgreater & X & \textgreater & \textgreater \\ \hline
-- & \textgreater & \textless & \textless & \textgreater & \textless & \textgreater & \textless 
-  & \textgreater & X & \textgreater & \textgreater \\ \hline
-/ & \textgreater & \textgreater & \textless &  \textgreater & \textless & \textgreater 
-  & \textgreater & \textgreater & X & \textgreater & \textgreater \\ \hline
-rel & \textless & \textless & \textless & \textgreater & \textless & \textless & \textless 
-    &  \textless & X & \textgreater & \textgreater \\ \hline
-f   & X & X & = & X & \textless & X & X & X & X & \textless  & \textgreater \\ \hline
-, & X & X & X & = & \textless & X & X & X & X & = & \textgreater \\ \hline
-\$ & \textless & \textless & \textless & X & \textless & \textless & \textless & \textless 
-   & \textless & X & X
+ 	\begin{table}[!ht]
+	\centering
+	 \caption{LL -- tabulka použita syntaktickou analýzou}
+		\label{table:ll_table}
+	\end{table}
  
-\end{tabular}
-\label{tab:3}
-\caption{Precedenční tabulka}
-\end{table}
-%\end{sidewaystable}
-\renewcommand{\arraystretch}{1}
+	
+ \section{LL Gramatika}
+ 
+
+ \noindent   
+ \begin{flushleft}
+    1. \texttt{<prolog>} -> \texttt{package main <prog>}
+
+	2. \texttt{<prog>} -> \texttt{EOL <prog>}
+
+	3. \texttt{<prog>} -> \texttt{func ID (<params>) <return\_type> \{ EOL <statement> \} <next\_prog>}
+
+	4. \texttt{<params>} -> \texttt{ID <type> <next\_params>}
+
+	5. \texttt{<params>} -> \texttt{$\epsilon$}
+
+	6. \texttt{<next\_params>} -> \texttt{, ID <type> <next\_params>}
+
+	7. \texttt{<return\_type>} -> \texttt{(<list\_type>)}
+
+	8. \texttt{<return\_type>} -> \texttt{$\epsilon$}
+
+	9. \texttt{<type>} -> \texttt{string}
+
+	10. \texttt{<type>} -> \texttt{float64}
+
+	11. \texttt{<type>} -> \texttt{int}
+
+	12. \texttt{<statement>} -> \texttt{ID <unary> <expression> EOL <statement>}
+
+	13. \texttt{<statement>} -> \texttt{ID <list\_id> = <exp/func> EOL <statement>}
+
+	14. \texttt{<statement>} -> \texttt{<call\_func> EOL <statement>}
+
+	%%15. \texttt{<statement>} -> \texttt{if <expression> NOT\_EOL \{ EOL <statement> \} NOT\_EOL else \{ EOL <statement> \} EOL <statement>}
+
+	15. \texttt{<statement>} -> \texttt{if <expression> NOT\_EOL \{ EOL <statement> \} <else/else\_if> EOL <statement>}
+
+	16. \texttt{<statement>} -> \texttt{for <init> ; <expression> ; <increment> \{ EOL <statement>\} EOL <statement>}
+
+	17. \texttt{<statement>} -> \texttt{$\epsilon$}
+
+	18. \texttt{<list\_id>} -> \texttt{, ID <list\_id>}
+
+	19. \texttt{<list\_id>} -> \texttt{$\epsilon$}
+
+	20. \texttt{<init>} -> \texttt{ID := <expression>}
+
+	21. \texttt{<init>} -> \texttt{$\epsilon$}
+
+	22. \texttt{<increment>} -> \texttt{ID <unary\_for> <expression>}
+	
+	23. \texttt{<increment>} -> \texttt{ID <list\_id> = <exp/func>}	
+
+	24. \texttt{<increment>} -> \texttt{$\epsilon$}
+	
+	25. \texttt{<unary\_for>} -> \texttt{ = }
+
+	26. \texttt{<unary\_for>} -> \texttt{ += }
+
+	27. \texttt{<unary\_for>} -> \texttt{ -= }
+
+	28. \texttt{<unary\_for>} -> \texttt{ *= }
+
+	29. \texttt{<unary\_for>} -> \texttt{ /= }
+
+	30. \texttt{<exp/func>} -> \texttt{<expression> <list\_exp>}
+
+	31. \texttt{<exp/func>} -> \texttt{<call\_func>}
+
+	32. \texttt{<list\_exp>} -> \texttt{, <expression> <list\_exp>}
+
+	33. \texttt{<list\_exp>} -> \texttt{$\epsilon$}
+
+	34. \texttt{<call\_func>} -> \texttt{ID (<term>) EOL <statement>}
+
+	35. \texttt{<term>} -> \texttt{<value> <list\_term>}
+
+	36. \texttt{<list\_term>} -> \texttt{, <value> <list\_term>}
+
+	37. \texttt{<list\_term>} -> \texttt{$\epsilon$}
+
+	38. \texttt{<value>} -> \texttt{STRING\_VALUE}
+
+	39. \texttt{<value>} -> \texttt{FLOAT64\_VALUE}
+
+	40. \texttt{<value>} -> \texttt{INT\_VALUE}
+
+	41. \texttt{<value>} -> \texttt{ID}
+
+	42. \texttt{<value>} -> \texttt{$\epsilon$}
+
+	43. \texttt{<statement>} -> \texttt{return <return\_exp> EOL <statement>}
+
+	44. \texttt{<return\_exp>} -> \texttt{<expression> <list\_exp>}
+
+	45. \texttt{<return\_exp>} -> \texttt{$\epsilon$}
+
+	46. \texttt{<list\_type>} -> \texttt{<type> <next\_type>}
+
+	47. \texttt{<list\_type>} -> \texttt{$\epsilon$}
+
+	48. \texttt{<next\_type>} -> \texttt{, <type> <next\_type>}
+
+	49. \texttt{<next\_type>} -> \texttt{$\epsilon$}
+
+	50. \texttt{<next\_prog>} -> \texttt{<prog>}
+
+	51. \texttt{<next\_prog>} -> \texttt{EOF}
+
+	52. \texttt{<unary>} -> \texttt{ := }
+
+	53. \texttt{<unary>} -> \texttt{ += }
+
+	54. \texttt{<unary>} -> \texttt{ -= }
+
+	55. \texttt{<unary>} -> \texttt{ *= }
+
+	56. \texttt{<unary>} -> \texttt{ /= }
+
+	57. \texttt{<type>} -> \texttt{bool}
+
+	58. \texttt{<value>} -> \texttt{BOOL\_VALUE}
+
+	59. \texttt{<else/else\_if>} -> \texttt{ NOT\_EOL else <IF> \{ EOL <statement> \} }
+
+	60. \texttt{<else/else\_if>} -> \texttt{$\epsilon$}
+
+	61. \texttt{<IF>} -> \texttt{if <expression> NOT\_EOL \{ EOL <statement> \} <else/else\_if> }
+
+	62. \texttt{<IF>} -> \texttt{ $\epsilon$ }
+
+	63. \texttt{<next\_params>} -> \texttt{$\epsilon$}
+	
+	
+	   
+		
+\end{flushleft} 
+
+	\begin{table}[!ht]
+	\centering
+	 \caption{LL -- gramatika řídící syntaktickou analýzu}
+		\label{table:ll_gramatika}
+	\end{table}
+
+\section{Precedenční tabulka}
 
 
 
+	\begin{table}[!ht]
+		\centering
+		\includegraphics[width=0.9\linewidth]{img/prec_table.pdf}
+		\caption{Precedenční tabulka použitá při precedenční syntaktické analýze výrazů}
+		\label{table:prec_table}
+	\end{table}
+	
 
-\begin{figure}[ht]
-\begin{center}
-\includegraphics[scale=0.58]{KA.jpg}
-\caption{Konečný automat}
-\label{pic:1}
-\end{center}
-\end{figure}
-
-
-\end{document}
+\end{document}	
